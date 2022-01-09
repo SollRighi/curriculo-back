@@ -35,12 +35,21 @@ const PORT = 8000;
 app.post('/comentario', async (req, res) => {
     const nome = req.body.nome
     const comentario = req.body.comentario
+    if(!nome || !comentario) {
+        res.status(400).send("Insira todos os dados solicitados.")
+        return
+    }
 
     const registro = new Comentario();
     registro.nome = nome
     registro.comentario = comentario
 
-    await registro.save()
+    try {
+        await registro.save();
+    } catch (e) {
+        res.status(400).send("Ocorreu um erro ao salvar")
+        return
+    }
 
     res.send ("O comentário foi salvo!")
 
@@ -60,6 +69,10 @@ app.post('/contato', async (req, res) => {
     const email = req.body.email
     const telefone = req.body.telefone
     const mensagem = req.body.mensagem
+    if(!nome || !email || !telefone || !mensagem ){
+        res.status(400).send("Insira todos os dados solicitados.")
+        return
+    }
 
 
     const registro = new Contato();
@@ -67,10 +80,14 @@ app.post('/contato', async (req, res) => {
     registro.email = email
     registro.telefone = telefone
     registro.mensagem = mensagem
+    try {
+        await registro.save();
+    } catch (e) {
+        res.status(400).send("Ocorreu um erro ao salvar")
+        return
+    }
 
-    await registro.save();
-
-    res.send ("Os seus dados estão salvos, em breve entrarei em contato");
+    res.send("Os seus dados estão salvos, em breve entrarei em contato");
 
 })
 
